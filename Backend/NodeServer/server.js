@@ -51,6 +51,7 @@ class Riddle {
         this.description = description
         this.difficulty = difficulty
         this.hints = []
+        this.completed = false
         riddles.push(this)
         process.stdout.write("SUCCESS\n")
     }
@@ -93,18 +94,28 @@ app.post('/createRiddle', (req, res) => {
         return res.status(400).send()
     }
     let myRiddle = new Riddle(riddles.length, req.body.name, req.body.description, req.body.difficulty)
-    return res.status(200).send()
+    return res.send(String(riddles.length -1))
+})
+
+app.post('/completeRiddle/:riddleID', (req, res) => {
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        console.log(`Unable to complete riddle ${req.params.riddleID} - it does not exist`)
+        return res.sendStatus(400)
+    }
+    myRiddle.completed = true
+    return res.sendStatus(200)
 })
 
 // curl -d ' {"id":0,"name":"Test Hint","description":"This is a useless Hint as a Test"}' -H 'content-type:application/json' "localhost:2999/addHint/0"
-app.post('/addHint/:riddleId', (req, res) => {
+app.post('/addHint/:riddleID', (req, res) => {
     if (req.body.name == null || req.body.description == null) {
         console.log("Wrong parameters for creating a hint")
         return res.status(400).send()
     }
-    let myRiddle = riddles.find(x => x.id == req.params.riddleId)
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
     if (myRiddle === undefined) {
-        console.log(`Unable to add a hint to riddle ${req.params.riddleId} - it does not exist`)
+        console.log(`Unable to add a hint to riddle ${req.params.riddleID} - it does not exist`)
         return res.status(404).send()
     }
     myRiddle.addHint(new Hint(myRiddle.hints.length, req.body.name, req.body.description))
