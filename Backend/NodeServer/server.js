@@ -27,7 +27,7 @@ class Hint {        //TODO add pictures
 
 }
 
-class Riddle {      //TODO add Icon/pictures
+class Riddle {      //TODO add Icon/pictures - make completion status numbers up to a maximum
     constructor(id, name, description, difficulty) {
         process.stdout.write(`Creating new Riddle: `)
         if (id == null || !id instanceof Number) {
@@ -97,7 +97,7 @@ app.post('/createRiddle', (req, res) => {
     return res.send(String(riddles.length -1))
 })
 
-app.post('/completeRiddle/:riddleID', (req, res) => {
+app.post('/completeRiddle/:riddleID', (req, res) => {   //change to number
     let myRiddle = riddles.find(x => x.id == req.params.riddleID)
     if (myRiddle === undefined) {
         console.log(`Unable to complete riddle ${req.params.riddleID} - it does not exist`)
