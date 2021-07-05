@@ -4,7 +4,7 @@ const port = 2999       //subject to change
 app.use(express.json());
 var riddles = []
 
-class Hint {
+class Hint {        //TODO add pictures
     constructor(id, name, description) {
         process.stdout.write(`Creating new Hint: `)
         if (id == null || !id instanceof Number) {
@@ -27,7 +27,7 @@ class Hint {
 
 }
 
-class Riddle {
+class Riddle {      //TODO add Icon/pictures
     constructor(id, name, description, difficulty) {
         process.stdout.write(`Creating new Riddle: `)
         if (id == null || !id instanceof Number) {
