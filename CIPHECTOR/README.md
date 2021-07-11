@@ -16,7 +16,7 @@ Es werden für jede Methoden Erklärung und Beispiel als Hinweis
 
 ## CICADA
 
-Cicada wird die Begleiterin des Spielers sein, die immer wieder Informationen über die verschlüsselte Information geben wird. 
+Cicada wird die Begleiterin des Spielers sein, die immer wieder Informationen über die verschlüsselte Nachricht geben wird. 
 
 
 ## Die Methoden 
