@@ -2,8 +2,8 @@
 
 ## Zusammenfassung
 
-Mathematisches Rätsel, das durch die wichtigste Verschlüsselungsmethoden der Geschichte geht und dem Teilnehmer durch ein Spiel das Kennenlernen der Methoden ermöglich.
-
+Mathematisches Rätsel, das durch die wichtigste Verschlüsselungsmethoden der Geschichte geht und den Teilnehmenden durch ein Spiel das Kennenlernen der Methoden ermöglich, sowie aktuelle angewandte Technologie.
+Die Teilnehmende sollen am Ende des Spieles 
 
 ## Epochen & Levels
 
