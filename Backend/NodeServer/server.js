@@ -4,66 +4,41 @@ const port = 2999       //subject to change
 app.use(express.json());
 var riddles = []
 
-class Hint {        //TODO add pictures
-    constructor(id, name, description) {
-        process.stdout.write(`Creating new Hint: `)
-        if (id == null || !id instanceof Number) {
-            process.stdout.write(`FAIL - invalid id ${id}\n`)
-            return null
-        }
-        if (name == null || !name instanceof String) {
-            process.stdout.write(`FAIL - invalid name ${name}\n`)
-            return null
-        }
-        if (description == null || !description instanceof String) {
-            process.stdout.write(`FAIL - invalid description ${description}\n`)
-            return null
-        }
-        this.id  = id
+class Description {
+    constructor(id, contentType, name, url) {
+        this.id = id
+        this.contentType = contentType
         this.name = name
-        this.description = description
-        process.stdout.write("SUCCESS\n")
+        this.url = url
     }
-
 }
 
 class Riddle {      //TODO add Icon/pictures - make completion status numbers up to a maximum
-    constructor(id, name, description, difficulty) {
-        process.stdout.write(`Creating new Riddle: `)
-        if (id == null || !id instanceof Number) {
-            process.stdout.write(`FAIL - invalid id ${id}\n`)
-            return null
-        }
-        if (name == null || !name instanceof String) {
-            process.stdout.write(`FAIL - invalid name ${name}\n`)
-            return null
-        }
-        if (description == null || !description instanceof String) {
-            process.stdout.write(`FAIL - invalid description ${description}\n`)
-            return null
-        }
-        if (difficulty == null || !difficulty instanceof Number || difficulty < 0 || difficulty > 10) {
-            process.stdout.write(`FAIL - invalid difficulty ${difficulty}\n`)
-            return null
-        }
+    constructor(id, name, url, difficulty, completionMax) {
         this.id  = id
         this.name = name
-        this.description = description
+        this.url = url
         this.difficulty = difficulty
+        this.completionMax = completionMax
+        this.completionState = 0
+        this.explanation = []
+        this.description = []
         this.hints = []
-        this.completed = false
-        riddles.push(this)
-        process.stdout.write("SUCCESS\n")
     }
 
-    addHint(hint) {
-        process.stdout.write(`Adding hint to riddle ${this.id}: `)
-        if (hint == null || !hint instanceof Hint) {
-            process.stdout.write("FAIL - invalid hint format\n")
-            return
-        }
+    addHint(name, contentType) {
+        let hint = new Description(this.hints.length, contentType, name, this.url + "/hints/" + this.hints.length)
         this.hints.push(hint)
-        process.stdout.write("SUCCESS\n")
+    }
+
+    addDescription(name, contentType) {
+        let desc = new Description(this.description.length, contentType, name, this.url + "/description/" + this.description.length)
+        this.description.push(desc)
+    }
+
+    addExplanation(name, contentType) {
+        let explan = new Description(this.explanation.length, contentType, name, this.url + "/explanation/" + this.explanation.length)
+        this.explanation.push(explan)
     }
     
 }
@@ -84,16 +59,57 @@ app.get('/', (req, res) => {
     }
 
     
-    res.json(riddles)
+    return res.json(riddles)
 })
 
-// curl -d '{"name":"Test Riddle","description":"This Riddle serves as a Test","difficulty":4}' -H 'content-type:application/json' "localhost:2999/createRiddle"
-app.post('/createRiddle', (req, res) => {
-    if (req.body.name == null || req.body.description == null || req.body.difficulty == null) {
-        console.log("Wrong parameters for creating a riddle")
-        return res.status(400).send()
+app.get('/riddles/:riddleID', (req,res) => {
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        return res.sendStatus(400)
     }
-    let myRiddle = new Riddle(riddles.length, req.body.name, req.body.description, req.body.difficulty)
+    return res.json(myRiddle)
+})
+
+app.get('/riddles/:riddleID/hints/:hintID', (req, res) => {
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        return res.sendStatus(400)
+    }
+    let tmp = myRiddle.hints.find(x => x.id == req.params.hintID)
+    if (tmp === undefined) {
+        return res.sendStatus(400)
+    }
+    return res.json(tmp)
+})
+
+app.get('/riddles/:riddleID/explanation/:explanID', (req, res) => {
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        return res.sendStatus(400)
+    }
+    let tmp = myRiddle.explanation.find(x => x.id == req.params.explanID)
+    if (tmp === undefined) {
+        return res.sendStatus(400)
+    }
+    return res.json(tmp)
+})
+
+app.get('/riddles/:riddleID/description/:descID', (req, res) => {
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        return res.sendStatus(400)
+    }
+    let tmp = myRiddle.description.find(x => x.id == req.params.descID)
+    if (tmp === undefined) {
+        return res.sendStatus(400)
+    }
+    return res.json(tmp)
+})
+
+// curl -d '{"name":"Test Riddle","difficulty":4, "completionMax": 5}' -H 'content-type:application/json' "localhost:2999/createRiddle"
+app.post('/createRiddle', (req, res) => {
+    let myRiddle = new Riddle(riddles.length, req.body.name, "http://127.0.0.1:2999/riddles/" + riddles.length, req.body.difficulty, req.body.completionMax)
+    riddles.push(myRiddle)
     return res.send(String(riddles.length -1))
 })
 
@@ -103,22 +119,41 @@ app.post('/completeRiddle/:riddleID', (req, res) => {   //change to number
         console.log(`Unable to complete riddle ${req.params.riddleID} - it does not exist`)
         return res.sendStatus(400)
     }
-    myRiddle.completed = true
+    myRiddle.completionState = myRiddle.completionState + 1
     return res.sendStatus(200)
 })
 
-// curl -d ' {"id":0,"name":"Test Hint","description":"This is a useless Hint as a Test"}' -H 'content-type:application/json' "localhost:2999/addHint/0"
+// curl -d ' {"id":0,"name":"Test Hint","contentType"; "application/json"}' -H 'content-type:application/json' "localhost:2999/addHint/0"
 app.post('/addHint/:riddleID', (req, res) => {
-    if (req.body.name == null || req.body.description == null) {
-        console.log("Wrong parameters for creating a hint")
-        return res.status(400).send()
-    }
+    
     let myRiddle = riddles.find(x => x.id == req.params.riddleID)
     if (myRiddle === undefined) {
         console.log(`Unable to add a hint to riddle ${req.params.riddleID} - it does not exist`)
         return res.status(404).send()
     }
-    myRiddle.addHint(new Hint(myRiddle.hints.length, req.body.name, req.body.description))
+    myRiddle.addHint(req.body.name, req.body.contentType)
+    return res.status(200).send()
+})
+
+app.post('/addExplanation/:riddleID', (req, res) => {
+    
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        console.log(`Unable to add an explanation to riddle ${req.params.riddleID} - it does not exist`)
+        return res.status(404).send()
+    }
+    myRiddle.addExplanation(req.body.name, req.body.contentType)
+    return res.status(200).send()
+})
+
+app.post('/addDescription/:riddleID', (req, res) => {
+    
+    let myRiddle = riddles.find(x => x.id == req.params.riddleID)
+    if (myRiddle === undefined) {
+        console.log(`Unable to add a description to riddle ${req.params.riddleID} - it does not exist`)
+        return res.status(404).send()
+    }
+    myRiddle.addDescription(req.body.name, req.body.contentType)
     return res.status(200).send()
 })
 
