@@ -39,3 +39,7 @@ Cicada wird die Begleiterin des Spielers sein, die immer wieder Informationen ü
 
 ## Evtl. Superlevel bonus für Quanton computing
 
+
+## Link for flowcharts: 
+
+https://drive.google.com/drive/folders/1WoLshVOfifLri86ZfaA9DwURoVaceMWH?usp=sharing
