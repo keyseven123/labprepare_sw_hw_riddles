@@ -19,12 +19,13 @@ Es werden für jede Methoden Erklärung und Beispiel als Hinweis
 Cicada wird die Begleiterin des Spielers sein, die immer wieder Informationen über die verschlüsselte Nachricht geben wird. 
 
 
-## Die Methoden 
+## Die Epochen
 
 *** Epoch 1 --> Per Hand Chiffrierscheibe *** 
 
+- steganography -> simple use (hide cipher in pic)
+- reverse cipher
 - Caeser-cipher
-- Aristo Slide Rule
 - Book code
 
 *** Epoch 2 --> Epoche 2: Maschinen***
@@ -40,6 +41,3 @@ Cicada wird die Begleiterin des Spielers sein, die immer wieder Informationen ü
 ## Evtl. Superlevel bonus für Quanton computing
 
 
-## Link for flowcharts: 
-
-https://drive.google.com/drive/folders/1WoLshVOfifLri86ZfaA9DwURoVaceMWH?usp=sharing
