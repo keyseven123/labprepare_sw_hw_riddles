@@ -21,18 +21,18 @@ Cicada wird die Begleiterin des Spielers sein, die immer wieder Informationen ü
 
 ## Die Epochen
 
-*** Epoch 1 --> Per Hand Chiffrierscheibe *** 
+***Epoch 1 --> Per Hand Chiffrierscheibe*** 
 
 - steganography -> simple use (hide cipher in pic)
 - reverse cipher
 - Caeser-cipher
 - Book code
 
-*** Epoch 2 --> Epoche 2: Maschinen***
+***Epoch 2 --> Epoche 2: Maschinen***
 - One-Time-Pad 
 - Enigma 
 
-*** Epoch 3 --> Epoche 3: Computer***
+***Epoch 3 --> Epoche 3: Computer***
 
 - DES 
 - RSA (Final-> prime numbers...)
