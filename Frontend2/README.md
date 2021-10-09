@@ -1,3 +1,5 @@
+Add "node_modules" folder
+
 # How to build and run project
 
 ## --BUILD APPLICATION--
